@@ -1,0 +1,12 @@
+#!/bin/bash
+#for file in /proc/{0..9}*/ ; do echo -n "`cat $file/cmdline`: "; awk '/Swap/{sum+=$2}END{print sum}' $file/smap; done
+for dir in `ls -ad /proc/{1..9}*`;
+do
+	pid=`echo $dir | cut -d / -f3`
+	process=`ps -p $pid -o comm --no-headers`
+	echo -n "$process : "
+	awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps
+done
+
+echo -en "\nTotal : "
+awk '/Swap/{sum+=$2}END{print sum}' /proc/*/smaps

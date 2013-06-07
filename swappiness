@@ -1,12 +1,21 @@
 #!/bin/bash
-#for file in /proc/{0..9}*/ ; do echo -n "`cat $file/cmdline`: "; awk '/Swap/{sum+=$2}END{print sum}' $file/smap; done
 for dir in `ls -ad /proc/{1..9}*`;
 do
-	pid=`echo $dir | cut -d / -f3`
-	process=`ps -p $pid -o comm --no-headers`
-	echo -n "$process : "
-	awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps
+	# check to see if the smaps file is there and if the 'Swap' variable is in the file 
+	# I wanted to check if the file was not empty but all smaps files show a size of 0
+	if [ -f "$dir/smaps" -a -n "`grep -i swap $dir/smaps | head -1`" ]; then
+		pid=`echo $dir | cut -d / -f3`
+		process=`ps -p $pid -o comm --no-headers`
+		echo -n "$process : "
+		awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps
+	fi
 done
 
+# Show the total from all the processes running at the end.
 echo -en "\nTotal : "
 awk '/Swap/{sum+=$2}END{print sum}' /proc/*/smaps
+
+## One Liner
+#for dir in `ls -ad /proc/{1..9}*`; do if [ -f "$dir/smaps" -a -n "`grep -i swap $dir/smaps | head -1`" ]; \
+#then pid=`echo $dir | cut -d / -f3`; process=`ps -p $pid -o comm --no-headers`; echo -n "$process : "; \
+#awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps; fi; done; echo -en "\nTotal : "; awk '/Swap/{sum+=$2}END{print sum}' /proc/*/smaps

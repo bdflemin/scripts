@@ -7,15 +7,13 @@ do
 		pid=`echo $dir | cut -d / -f3`
 		process=`ps -p $pid -o comm --no-headers`
 		echo -n "$process : "
-		awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps
+		awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps | column -t
 	fi
 done
 
 # Show the total from all the processes running at the end.
 echo -en "\nTotal : "
-awk '/Swap/{sum+=$2}END{print sum}' /proc/*/smaps
+awk '/Swap/{sum+=$2}END{print sum}' /proc/*/smaps | column -t
 
 ## One Liner
-#for dir in `ls -ad /proc/{1..9}*`; do if [ -f "$dir/smaps" -a -n "`grep -i swap $dir/smaps | head -1`" ]; \
-#then pid=`echo $dir | cut -d / -f3`; process=`ps -p $pid -o comm --no-headers`; echo -n "$process : "; \
-#awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps; fi; done; echo -en "\nTotal : "; awk '/Swap/{sum+=$2}END{print sum}' /proc/*/smaps
+# for dir in `ls -ad /proc/{1..9}*`; do if [ -f "$dir/smaps" -a -n "`grep -i swap $dir/smaps | head -1`" ]; then pid=`echo $dir | cut -d / -f3`; process=`ps -p $pid -o comm --no-headers`; echo -n "$process : "; awk '/Swap/{sum+=$2}END{print sum}' $dir/smaps | column -t; fi; done; echo -en "\nTotal : "; awk '/Swap/{sum+=$2}END{print sum}' /proc/*/smaps | column -t

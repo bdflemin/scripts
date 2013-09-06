@@ -1,7 +1,8 @@
 import os, re
 def filePop(top):
     sizeList = []
-    exclude = "^/proc.*|^/sys.*|^/boot.*|^/tmp.*"
+    #exclude = "^/proc.*|^/sys.*|^/boot.*|^/tmp.*|^/mnt.*"
+    exclude = "^/proc.*|^/sys.*|^/boot.*|/tmp.*|/home.*|/var.*|/data.*"
     # Skip any files that are located in /proc, /sys or /boot
     for root,dirs,files in os.walk(top):
         if re.findall(exclude,root):

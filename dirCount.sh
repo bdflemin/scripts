@@ -21,6 +21,5 @@ done
 echo -ne "/:\t\t\t"; find / -type f | wc -l;
 echo "-------";
 
-
 ## One Liner (run as root) ##
 #for i in $(find / -maxdepth 1 -type d | egrep -v "^/$" | sort); do [ "$i" == "/proc" ] && continue; [ "$i" == "/sys" ] && continue; echo -ne "$i:\t\t\t"; find $i -type f | wc -l; echo "-------"; done echo -ne "/:\t\t\t"; find / -type f | wc -l; echo "-------";

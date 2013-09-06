@@ -14,5 +14,4 @@ filesearch.close()
 
 for p in getpwall():
 	if int(p[2]) >= int(d['UID_MIN']) and int(p[2]) <= int(d['UID_MAX']):
-		if str(p[0]) != "rack":
-			print p[0]
+		print p[0]
